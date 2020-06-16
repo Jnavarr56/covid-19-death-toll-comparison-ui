@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
-import BarChart from "./components/BarChart";
-import Sources from "./components/Sources";
+
 import { makeStyles, Divider, Tab, Tabs } from "@material-ui/core";
-import InsertChartIcon from "@material-ui/icons/InsertChart";
-import DescriptionIcon from "@material-ui/icons/Description";
+import SummaryIcon from "@material-ui/icons/FormatListNumbered";
+import ChartIcon from "@material-ui/icons/InsertChart";
+import SourcesIcon from "@material-ui/icons/Description";
+
 import { useParams, useLocation, useHistory } from "react-router-dom";
+
+import Chart from "./components/Chart";
+import Summary from "./components/Summary";
+import Sources from "./components/Sources";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -37,15 +42,21 @@ const useStyles = makeStyles(() => ({
 
 const TABS = [
   {
+    label: "summary",
+    slug: "summary",
+    icon: <SummaryIcon />,
+    view: <Summary />,
+  },
+  {
     label: "chart",
     slug: "chart",
-    icon: <InsertChartIcon />,
-    view: <BarChart />,
+    icon: <ChartIcon />,
+    view: <Chart />,
   },
   {
     label: "sources",
     slug: "sources",
-    icon: <DescriptionIcon />,
+    icon: <SourcesIcon />,
     view: <Sources />,
   },
 ];

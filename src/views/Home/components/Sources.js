@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
+
+import { makeStyles, Fade } from "@material-ui/core";
+
 import axios from "axios";
-import "react-datasheet/lib/react-datasheet.css";
-import { makeStyles, Fade, CircularProgress } from "@material-ui/core";
+
+import CircularLoadingAnimation from "../../../components/CircularLoadingAnimation";
+
+import { API_URL } from "../../../vars";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +38,7 @@ const Sources = ({ dataset }) => {
   useEffect(() => {
     let mounted = true;
     axios
-      .get(`${process.env.REACT_APP_API_URL}/sources`)
+      .get(`${API_URL}/sources`)
       .then(({ data }) => {
         if (mounted) {
           console.log(data);
@@ -48,18 +53,10 @@ const Sources = ({ dataset }) => {
     return () => (mounted = false);
   }, []);
 
-  const LoadingAnimation = () => {
-    return (
-      <Fade in={true}>
-        <CircularProgress size={100} color={"secondary"} />
-      </Fade>
-    );
-  };
-
   return (
     <div className={classes.root}>
       {fetching || !data ? (
-        <LoadingAnimation />
+        <CircularLoadingAnimation size={100} color="secondary" />
       ) : (
         <Fade in={true}>
           <div className={classes.content}>
