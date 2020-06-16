@@ -4,7 +4,7 @@ import Sources from "./components/Sources";
 import { makeStyles, Divider, Tab, Tabs } from "@material-ui/core";
 import InsertChartIcon from "@material-ui/icons/InsertChart";
 import DescriptionIcon from "@material-ui/icons/Description";
-import { useParams, useLocation, useHistory, Redirect } from "react-router-dom";
+import { useParams, useLocation, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
   root: {
