@@ -67,7 +67,7 @@ const Home = () => {
     } else {
       history.push(`/${location.pathname.split("/")[1]}/${TABS[0].slug}`);
     }
-  }, [params.tab]);
+  }, [params.tab, history, location.pathname, renderTab]);
 
   const handleChange = (ev, newValue) => {
     if (newValue !== params.tab) {
