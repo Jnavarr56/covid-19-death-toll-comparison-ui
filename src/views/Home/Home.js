@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BarChart from "./components/BarChart";
+import Sources from "./components/Sources";
 import { makeStyles, Divider, Tab, Tabs } from "@material-ui/core";
 import InsertChartIcon from "@material-ui/icons/InsertChart";
 import DescriptionIcon from "@material-ui/icons/Description";
+import { useParams, useLocation, useHistory, Redirect } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -21,6 +23,8 @@ const useStyles = makeStyles(() => ({
     width: "100%",
   },
   content: {
+    overflow: "hidden",
+    width: "100%",
     flexGrow: 1,
   },
   tabLabel: {
@@ -31,11 +35,45 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const TABS = [
+  {
+    label: "chart",
+    slug: "chart",
+    icon: <InsertChartIcon />,
+    view: <BarChart />,
+  },
+  {
+    label: "sources",
+    slug: "sources",
+    icon: <DescriptionIcon />,
+    view: <Sources />,
+  },
+];
+
 const Home = () => {
-  const [tab, setTab] = useState("chart");
   const classes = useStyles();
 
-  const handleChange = (ev, newValue) => setTab(newValue);
+  const params = useParams();
+  const location = useLocation();
+  const history = useHistory();
+
+  const [tab, setTab] = useState("");
+
+  const renderTab = TABS.find((tab) => tab.slug === params.tab);
+
+  useEffect(() => {
+    if (renderTab) {
+      setTab(params.tab);
+    } else {
+      history.push(`/${location.pathname.split("/")[1]}/${TABS[0].slug}`);
+    }
+  }, [params.tab]);
+
+  const handleChange = (ev, newValue) => {
+    if (newValue !== params.tab) {
+      history.push(`/${location.pathname.split("/")[1]}/${newValue}`);
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -46,36 +84,21 @@ const Home = () => {
         indicatorColor="secondary"
         textColor="secondary"
       >
-        <Tab
-          label={
-            <span className={classes.tabLabel}>
-              Chart
-              <InsertChartIcon />
-            </span>
-          }
-          value={"chart"}
-        />
-        <Tab
-          label={
-            <span className={classes.tabLabel}>
-              NYT Dataset
-              <DescriptionIcon />
-            </span>
-          }
-          value={"nyt-dataset"}
-        />
-        <Tab
-          label={
-            <span className={classes.tabLabel}>
-              CDC Dataset
-              <DescriptionIcon />
-            </span>
-          }
-          value={"cdc-dataset"}
-        />
+        {TABS.map((tab) => (
+          <Tab
+            key={tab.label}
+            label={
+              <span className={classes.tabLabel}>
+                {tab.label}
+                {tab.icon}
+              </span>
+            }
+            value={tab.slug}
+          />
+        ))}
       </Tabs>
       <Divider className={classes.divider} variant="fullWidth" />
-      <div className={classes.content}>{tab === "chart" && <BarChart />}</div>
+      <div className={classes.content}>{renderTab && renderTab.view}</div>
     </div>
   );
 };

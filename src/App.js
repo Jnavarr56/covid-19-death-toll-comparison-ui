@@ -2,7 +2,7 @@ import React from "react";
 import { CssBaseline, createMuiTheme, ThemeProvider } from "@material-ui/core";
 import MainLayout from "./layout/Main";
 import Home from "./views/Home";
-
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -22,14 +22,17 @@ const theme = createMuiTheme({
 
 const App = () => {
   return (
-    <>
+    <BrowserRouter>
       <CssBaseline />
       <ThemeProvider theme={theme}>
         <MainLayout>
-          <Home />
+          <Switch>
+            <Route exact={true} path="/home/:tab?" component={Home} />
+            <Redirect to={"/home"} />
+          </Switch>
         </MainLayout>
       </ThemeProvider>
-    </>
+    </BrowserRouter>
   );
 };
 

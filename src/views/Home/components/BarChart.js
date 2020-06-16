@@ -8,9 +8,10 @@ import {
 } from "@material-ui/core";
 import Chart from "react-apexcharts";
 import { CountUp } from "use-count-up";
+
 const config = {
   options: {
-    labels: ["New York Times", "CDC"],
+    labels: ["New York Times", "CDC", "John Hopkins CSSE"],
     plotOptions: {
       bar: {
         horizontal: true,
@@ -54,17 +55,14 @@ const useStyles = makeStyles(() => ({
 
 const BarChart = () => {
   const [data, setData] = useState(null);
-  const [fetching, setFetching] = useState(null);
+  const [fetching, setFetching] = useState(true);
 
   const classes = useStyles();
 
   useEffect(() => {
     let mounted = true;
-
-    setFetching(true);
-
     axios
-      .get("http://localhost:3000/results")
+      .get(`${process.env.REACT_APP_API_URL}/results`)
       .then(({ data }) => {
         if (mounted) {
           setData(data);
@@ -90,14 +88,14 @@ const BarChart = () => {
   const HeaderText = () => {
     if (!data) return null;
 
-    const { nyt_death_toll, cdc_death_toll } = data;
-    const higher = Math.max(nyt_death_toll, cdc_death_toll);
-    const lower = Math.min(nyt_death_toll, cdc_death_toll);
+    const { nyt, cdc } = data;
+    const higher = Math.max(nyt.death_count, cdc.death_count);
+    const lower = Math.min(nyt.death_count, cdc.death_count);
 
     return (
       <Typography variant="h4">
         The
-        {` ${higher === nyt_death_toll ? "New York Times" : "CDC"} `}
+        {` ${higher === nyt.death_count ? "New York Times" : "CDC"} `}
         is reporting{" "}
         <span className={classes.bold}>
           <CountUp isCounting={true} start={0} end={higher - lower} />
@@ -117,13 +115,16 @@ const BarChart = () => {
             <HeaderText />
             <Chart
               type="bar"
-              //   height={800}
               width={800}
               options={config.options}
               series={[
                 {
-                  name: "NYT vs. CDC Covid-19 Death Counts",
-                  data: [data.nyt_death_toll, data.cdc_death_toll],
+                  name: "NYT vs. CDC vs. JSU CSSE Covid-19 Death Counts",
+                  data: [
+                    data.nyt.death_count,
+                    data.cdc.death_count,
+                    data.jhu.death_count,
+                  ],
                 },
               ]}
             />
