@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { makeStyles, Divider, Tab, Tabs, AppBar } from "@material-ui/core";
+import { makeStyles, Divider, Tab, Tabs } from "@material-ui/core";
 import SummaryIcon from "@material-ui/icons/FormatListNumbered";
 import ChartIcon from "@material-ui/icons/InsertChart";
 import SourcesIcon from "@material-ui/icons/Description";
