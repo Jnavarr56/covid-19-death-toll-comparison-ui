@@ -133,6 +133,7 @@ const Chart = () => {
       transform: "translateY(0%)",
     },
     config: config.stiff,
+    delay: 250,
   });
 
   const rightSpring = useSpring({
@@ -143,6 +144,7 @@ const Chart = () => {
       transform: "translateY(0%)",
     },
     config: config.stiff,
+    delay: 250,
   });
 
   if (fetching || !data) {
