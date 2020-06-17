@@ -134,7 +134,7 @@ const TechStack = () => {
                     <b>
                       <Link
                         className={clsx(classes.link, classes.linkWithIcon)}
-                        to={item.link}
+                        href={item.link}
                       >
                         <span>{item.label}</span>
                         <LinkIcon />
@@ -157,7 +157,7 @@ const TechStack = () => {
                     <Link
                       className={classes.link}
                       label={item.label}
-                      to={item.prefix + item.link}
+                      href={item.prefix + item.link}
                     >
                       {item.link}
                     </Link>

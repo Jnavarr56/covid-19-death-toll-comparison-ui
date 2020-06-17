@@ -130,7 +130,7 @@ const About = () => {
                     <Link
                       className={classes.link}
                       label={item.label}
-                      to={item.prefix + item.link}
+                      href={item.prefix + item.link}
                     >
                       {item.link}
                     </Link>
