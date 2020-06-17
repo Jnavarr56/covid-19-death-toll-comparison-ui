@@ -11,6 +11,7 @@ import {
 
 import axios from "axios";
 import clsx from "clsx";
+import Helmet from "react-helmet";
 import ApexChart from "react-apexcharts";
 import { CountUp } from "use-count-up";
 
@@ -166,47 +167,56 @@ const Chart = () => {
   );
 
   return (
-    <div className={classes.root}>
-      {data && (
-        <Fade in={true}>
-          <div className={classes.root}>
-            <Grid className={classes.grid} container={true} justify={"center"}>
+    <>
+      <Helmet>
+        <title>Chart</title>
+      </Helmet>
+      <div className={classes.root}>
+        {data && (
+          <Fade in={true}>
+            <div className={classes.root}>
               <Grid
-                className={classes.gridItem}
-                xs={12}
-                lg={5}
-                xl={4}
-                item={true}
+                className={classes.grid}
+                container={true}
+                justify={"center"}
               >
-                {HeaderText}
+                <Grid
+                  className={classes.gridItem}
+                  xs={12}
+                  lg={5}
+                  xl={4}
+                  item={true}
+                >
+                  {HeaderText}
+                </Grid>
+                <Grid
+                  className={classes.gridItem}
+                  xs={12}
+                  lg={5}
+                  xl={6}
+                  item={true}
+                >
+                  <ApexChart
+                    type={"bar"}
+                    width={chartWidth}
+                    options={config.options}
+                    series={[
+                      {
+                        data: [
+                          data.nyt.death_count,
+                          data.cdc.death_count,
+                          data.jhu.death_count,
+                        ],
+                      },
+                    ]}
+                  />
+                </Grid>
               </Grid>
-              <Grid
-                className={classes.gridItem}
-                xs={12}
-                lg={5}
-                xl={6}
-                item={true}
-              >
-                <ApexChart
-                  type={"bar"}
-                  width={chartWidth}
-                  options={config.options}
-                  series={[
-                    {
-                      data: [
-                        data.nyt.death_count,
-                        data.cdc.death_count,
-                        data.jhu.death_count,
-                      ],
-                    },
-                  ]}
-                />
-              </Grid>
-            </Grid>
-          </div>
-        </Fade>
-      )}
-    </div>
+            </div>
+          </Fade>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -15,9 +15,19 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 import PropTypes from "prop-types";
+
+import HomeIcon from "@material-ui/icons/Home";
+import AboutIcon from "@material-ui/icons/Info";
+import TechStackIcon from "@material-ui/icons/GitHub";
+
+import { NavLink, useLocation } from "react-router-dom";
+
+const ROUTES = [
+  { label: "Home", path: "/home", icon: <HomeIcon /> },
+  { label: "About", path: "/about", icon: <AboutIcon /> },
+  { label: "Tech Stack", path: "/tech-stack", icon: <TechStackIcon /> },
+];
 
 const drawerWidth = 240;
 
@@ -81,12 +91,23 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
+  activeLink: {
+    "&, & *": {
+      color: theme.palette.secondary.main,
+    },
+  },
 }));
 
 const Main = ({ children }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    setOpen((prev) => (prev ? false : prev));
+  }, [location.pathname]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -141,12 +162,16 @@ const Main = ({ children }) => {
           </div>
           <Divider />
           <List>
-            {["About", "Tech Stack"].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
+            {ROUTES.map((item) => (
+              <ListItem
+                button
+                activeClassName={classes.activeLink}
+                component={NavLink}
+                to={item.path}
+                key={item.label}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.label} />
               </ListItem>
             ))}
           </List>

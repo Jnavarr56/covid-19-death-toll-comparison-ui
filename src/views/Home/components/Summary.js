@@ -124,7 +124,13 @@ const Summary = () => {
                 justify={"space-evenly"}
               >
                 {data.map((source) => (
-                  <Grid className={classes.gridItem} item={true} xs={12} md={3}>
+                  <Grid
+                    key={source.title}
+                    className={classes.gridItem}
+                    item={true}
+                    xs={12}
+                    md={3}
+                  >
                     <Card className={classes.card} key={source.title}>
                       <CardHeader
                         titleTypographyProps={{
@@ -133,7 +139,7 @@ const Summary = () => {
                         className={classes.cardHeader}
                         title={source.title}
                       />
-                      <Divider fullWidth={true} />
+                      <Divider />
                       <CardContent className={classes.cardContent}>
                         <Typography variant={"h4"}>
                           <CountUp

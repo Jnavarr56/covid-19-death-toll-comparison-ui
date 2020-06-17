@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { makeStyles, Divider, Tab, Tabs } from "@material-ui/core";
+import { makeStyles, Divider, Tab, Tabs, AppBar } from "@material-ui/core";
 import SummaryIcon from "@material-ui/icons/FormatListNumbered";
 import ChartIcon from "@material-ui/icons/InsertChart";
 import SourcesIcon from "@material-ui/icons/Description";
@@ -11,7 +11,7 @@ import Chart from "./components/Chart";
 import Summary from "./components/Summary";
 import Sources from "./components/Sources";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     height: "100%",
     width: "100%",
@@ -21,8 +21,23 @@ const useStyles = makeStyles(() => ({
     alignItems: "center",
     position: "relative",
   },
+  tabsContainer: {
+    display: "flex",
+    justifyContent: "center",
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      justifyContent: "flex-start",
+    },
+  },
   tabs: {
-    alignSelf: "flex-start",
+    [theme.breakpoints.up("md")]: {
+      "& .MuiTabScrollButton-root": {
+        display: "none",
+      },
+    },
+
+    // width: "100%",
+    // flexShrink: 0,
   },
   divider: {
     width: "100%",
@@ -68,7 +83,7 @@ const Home = () => {
   const location = useLocation();
   const history = useHistory();
 
-  const [tab, setTab] = useState("");
+  const [tab, setTab] = useState(false);
 
   const renderTab = TABS.find((tab) => tab.slug === params.tab);
 
@@ -88,26 +103,30 @@ const Home = () => {
 
   return (
     <div className={classes.root}>
-      <Tabs
-        className={classes.tabs}
-        value={tab}
-        onChange={handleChange}
-        indicatorColor="secondary"
-        textColor="secondary"
-      >
-        {TABS.map((tab) => (
-          <Tab
-            key={tab.label}
-            label={
-              <span className={classes.tabLabel}>
-                {tab.label}
-                {tab.icon}
-              </span>
-            }
-            value={tab.slug}
-          />
-        ))}
-      </Tabs>
+      <div className={classes.tabsContainer}>
+        <Tabs
+          className={classes.tabs}
+          value={tab}
+          onChange={handleChange}
+          variant="scrollable"
+          scrollButtons="on"
+          indicatorColor="secondary"
+          textColor="secondary"
+        >
+          {TABS.map((tab) => (
+            <Tab
+              key={tab.label}
+              label={
+                <span className={classes.tabLabel}>
+                  {tab.label}
+                  {tab.icon}
+                </span>
+              }
+              value={tab.slug}
+            />
+          ))}
+        </Tabs>
+      </div>
       <Divider className={classes.divider} variant="fullWidth" />
       <div className={classes.content}>{renderTab && renderTab.view}</div>
     </div>
