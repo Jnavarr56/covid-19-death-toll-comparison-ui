@@ -14,12 +14,15 @@ import clsx from "clsx";
 import Helmet from "react-helmet";
 import ApexChart from "react-apexcharts";
 import { CountUp } from "use-count-up";
+import { useSpring, animated, config } from "react-spring";
 
 import CircularLoadingAnimation from "../../../components/CircularLoadingAnimation";
 
 import { API_URL } from "../../../vars";
 
-const config = {
+const AnimatedTypography = animated(Typography);
+
+const chartConfig = {
   options: {
     labels: [
       "New York Times",
@@ -122,6 +125,26 @@ const Chart = () => {
     return () => (mounted = false);
   }, []);
 
+  const leftSpring = useSpring({
+    from: {
+      transform: "translateY(-100%)",
+    },
+    to: {
+      transform: "translateY(0%)",
+    },
+    config: config.stiff,
+  });
+
+  const rightSpring = useSpring({
+    from: {
+      transform: "translateY(100%)",
+    },
+    to: {
+      transform: "translateY(0%)",
+    },
+    config: config.stiff,
+  });
+
   if (fetching || !data) {
     return (
       <div className={clsx(classes.root, classes.loading)}>
@@ -149,7 +172,7 @@ const Chart = () => {
   const gteTwo = figures[0].figure - figures[2].figure;
 
   const HeaderText = (
-    <Typography variant="h4">
+    <AnimatedTypography style={leftSpring} variant="h4">
       <b>{figures[0].provider}</b>
       {" is reporting "}
       <b>
@@ -163,7 +186,7 @@ const Chart = () => {
       {" more deaths than "}
       <b>{figures[2].provider}</b>
       {" is reporting."}
-    </Typography>
+    </AnimatedTypography>
   );
 
   return (
@@ -173,7 +196,7 @@ const Chart = () => {
       </Helmet>
       <div className={classes.root}>
         {data && (
-          <Fade in={true}>
+          <Fade in={true} timeout={1000}>
             <div className={classes.root}>
               <Grid
                 className={classes.grid}
@@ -196,20 +219,22 @@ const Chart = () => {
                   xl={6}
                   item={true}
                 >
-                  <ApexChart
-                    type={"bar"}
-                    width={chartWidth}
-                    options={config.options}
-                    series={[
-                      {
-                        data: [
-                          data.nyt.death_count,
-                          data.cdc.death_count,
-                          data.jhu.death_count,
-                        ],
-                      },
-                    ]}
-                  />
+                  <animated.div style={rightSpring}>
+                    <ApexChart
+                      type={"bar"}
+                      width={chartWidth}
+                      options={chartConfig.options}
+                      series={[
+                        {
+                          data: [
+                            data.nyt.death_count,
+                            data.cdc.death_count,
+                            data.jhu.death_count,
+                          ],
+                        },
+                      ]}
+                    />
+                  </animated.div>
                 </Grid>
               </Grid>
             </div>

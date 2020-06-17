@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import MainLayout from "./layout/Main";
 import Home from "./views/Home";
 import About from "./views/About";
+import TechStack from "./views/TechStack";
 
 const theme = createMuiTheme({
   palette: {
@@ -34,7 +35,7 @@ const App = () => {
           <Switch>
             <Route exact={true} path="/home/:tab?" component={Home} />
             <Route exact={true} path="/about" component={About} />
-            {/* <Route exact={true} path="/tech-staack" component={Home} /> */}
+            <Route exact={true} path="/tech-stack" component={TechStack} />
             <Redirect to={"/home"} />
           </Switch>
         </MainLayout>

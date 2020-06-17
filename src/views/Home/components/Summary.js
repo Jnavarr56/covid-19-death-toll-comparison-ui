@@ -4,7 +4,7 @@ import {
   makeStyles,
   Fade,
   Divider,
-  Card,
+  Card as MuiCard,
   CardHeader,
   CardContent,
   Typography,
@@ -15,9 +15,12 @@ import axios from "axios";
 import clsx from "clsx";
 import Helmet from "react-helmet";
 import { CountUp } from "use-count-up";
+import { useTrail, animated, config } from "react-spring";
 
 import CircularLoadingAnimation from "../../../components/CircularLoadingAnimation";
 import { API_URL } from "../../../vars";
+
+const Card = animated(MuiCard);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -101,6 +104,16 @@ const Summary = () => {
     return () => (mounted = false);
   }, []);
 
+  const trail = useTrail(data ? data.length : 0, {
+    from: {
+      transform: "translateY(100%)",
+    },
+    to: {
+      transform: "translateY(0%)",
+    },
+    config: config.stiff,
+  });
+
   if (fetching || !data) {
     return (
       <div className={clsx(classes.root, classes.loading)}>
@@ -116,14 +129,14 @@ const Summary = () => {
       </Helmet>
       <div className={classes.root}>
         {data && (
-          <Fade in={true}>
+          <Fade in={true} timeout={1000}>
             <div className={clsx(classes.root, classes.content)}>
               <Grid
                 className={classes.grid}
                 container={true}
                 justify={"space-evenly"}
               >
-                {data.map((source) => (
+                {data.map((source, index) => (
                   <Grid
                     key={source.title}
                     className={classes.gridItem}
@@ -131,7 +144,11 @@ const Summary = () => {
                     xs={12}
                     md={3}
                   >
-                    <Card className={classes.card} key={source.title}>
+                    <Card
+                      style={trail[index]}
+                      className={classes.card}
+                      key={source.title}
+                    >
                       <CardHeader
                         titleTypographyProps={{
                           align: "center",
